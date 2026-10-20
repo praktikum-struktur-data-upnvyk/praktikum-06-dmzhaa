@@ -69,44 +69,53 @@ string display(const Queue& q) {
 // =============================================================================
 
 // =============================================================================
-// SOAL 1 — enqueue()                                                  35 poin
+// SOAL 1 — enqueue()                                                   35 poin
 // =============================================================================
 bool enqueue(Queue& q, int nomor) {
-    Node *baru = new Node {nomor, nullptr};
+    Node *baru = new Node;
+    baru->data = nomor;
+    baru->next = nullptr;
 
     if (isEmpty(q)) {
-     q.depan = baru;
+        q.depan = baru;
+        q.belakang = baru;
     } else {
-     q.belakang->next = baru;
+        q.belakang->next = baru;
+        q.belakang = baru;
     }
-    q.belakang = baru;
 
     return true;
 }
 
 // =============================================================================
-// SOAL 2 — dequeue()                                                  40 poin
+// SOAL 2 — dequeue()                                                   40 poin
 // =============================================================================
 bool dequeue(Queue& q, int& nomor) {
     if (isEmpty(q)) {
-    return false;
+        return false;
     }
 
     Node *hapus = q.depan;
-    nomor = q.depan->data;
+    nomor = hapus->data; 
     q.depan = q.depan->next;
 
+    // FIX: Jika setelah dikeluarkan queue jadi kosong,
+    // pointer belakang JUGA harus dijadikan NULL/nullptr!
+    if (q.depan == nullptr) {
+        q.belakang = nullptr;
+    }
+    
     delete hapus;
     return true;
 }
 
 // =============================================================================
-// SOAL 3 — clear()                                                    25 poin
+// SOAL 3 — clear()                                                     25 poin
 // =============================================================================
 void clear(Queue& q) {
     Node *bantu = q.depan;
-
-    while (bantu != NULL) {
+    
+    while (bantu != nullptr) {
         Node *hapus = bantu;
         bantu = bantu->next;
         delete hapus;
